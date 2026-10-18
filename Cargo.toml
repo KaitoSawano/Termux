@@ -1,0 +1,87 @@
+# Copyright (c) 2026 Aldianokto
+# Copyright (c) 2026-present Zenachain Core developers
+# Distributed under the MIT software license, see the accompanying
+# file LICENSE or https://opensource.org/license/mit.
+
+[workspace]
+members = [
+    ".",
+    "crypto"
+]
+
+[package]
+name = "zenachain"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+description = "ZenaChain (ZENAC) node, CLI, and miner"
+license = "MIT"
+repository = "https://github.com/KaitoSawano/block"
+homepage = "https://github.com/KaitoSawano/block"
+documentation = "https://docs.rs/zenachain"
+keywords = ["blockchain", "cryptocurrency", "p2p", "secp256k1"]
+categories = ["cryptography::cryptocurrencies", "network-programming"]
+
+[lib]
+name = "zenachain"
+path = "src/lib.rs"
+
+[[bin]]
+name = "zenachain"
+path = "src/main.rs"
+
+[[bin]]
+name = "zenachaind"
+path = "src/bin/zenachaind.rs"
+
+[[bin]]
+name = "zenachain-miner"
+path = "src/bin/zenachain-miner.rs"
+
+[[bin]]
+name = "zenachain-genesis"
+path = "src/bin/zenachain-genesis.rs"
+
+[[test]]
+name = "integration"
+path = "src/tests/mod.rs"
+
+[dependencies]
+sha3 = "0.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+hex = "0.4"
+rand = "0.8"
+secp256k1 = { version = "0.29", features = ["rand", "recovery"] }
+tokio = { version = "1", features = [
+    "rt-multi-thread",
+    "macros",
+    "net",
+    "time",
+    "signal",
+    "sync",
+    "io-util",
+] }
+futures = "0.3"
+zenachain-crypto = { path = "crypto" }
+
+[dev-dependencies]
+tempfile = "3"
+serial_test = "3"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = "symbols"
+debug = false
+
+[profile.dev]
+opt-level = 0
+debug = true
+incremental = true
+
+[profile.test]
+opt-level = 0
+debug = true
+incremental = true
